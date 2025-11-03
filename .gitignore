@@ -1,0 +1,19 @@
+# Diretório de saída do Maven (arquivos compilados)
+/target/
+
+# Arquivos JAR/WAR da aplicação
+*.jar
+*.war
+
+# Arquivos de IDE (IntelliJ, Eclipse, etc.)
+.idea/
+.metadata
+.classpath
+.project
+tmp/
+
+# Logs e arquivos temporários
+*.log
+log/
+temp/
+
