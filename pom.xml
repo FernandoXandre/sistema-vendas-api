@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.bololoko.scev</groupId>
-	<artifactId>sistemaVendas</artifactId>
+	<artifactId>api-sistemaVendas</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>sistemaVendas</name>
 	<description>Elaboração do sistema de controle de estoque e vendas da Bolo Loko</description>
@@ -45,6 +45,8 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		
+		
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>

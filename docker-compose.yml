@@ -1,0 +1,41 @@
+services:
+  postgres-sistema-vendas:
+    image: postgres:16-alpine
+    container_name: db_sistemaVendas
+    restart: always
+
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+
+    ports:
+      - "5434:5432"
+
+    volumes:
+      - volume-postgres-sistema-vendas:/var/lib/postgresql/data
+
+  api-sistema-vendas:
+    container_name: api-sistemaVendas
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      API_DB_HOST: ${API_DB_HOST}
+      API_DB_PORT: ${API_DB_PORT}
+      API_DB_NAME: ${API_DB_NAME}
+      API_DB_USER: ${API_DB_USER}
+      API_DB_PASSWORD: ${API_DB_PASSWORD}
+
+    depends_on:
+      - postgres-sistema-vendas
+
+    restart: on-failure
+
+volumes:
+  volume-postgres-sistema-vendas:

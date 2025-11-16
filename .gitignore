@@ -17,3 +17,6 @@ tmp/
 log/
 temp/
 
+# Arquivo de ambiente
+.env
+
