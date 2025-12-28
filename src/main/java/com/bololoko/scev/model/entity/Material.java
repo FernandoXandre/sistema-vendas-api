@@ -1,72 +1,65 @@
 package com.bololoko.scev.model.entity;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter 
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tb_material")
 public class Material {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id_material;
+	private Long idMaterial;
 	
-	private String nome;
-	private String unidade_medida;
-	private int qtd_estoque;
-	private BigDecimal preco_pago;
+	@NotBlank(message = "O nome do material é obrigatorio")
+	@Column(nullable = false, length = 50)
+	private String nomeMaterial;
 	
-	@OneToMany(mappedBy = "id_material_compra.material", fetch = FetchType.LAZY)
-	private Set<MaterialCompra> itensCompra;
+	@NotNull(message = "O tipo de medida do material precisa ser preenchido.")
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = 3)
+	private UnidadeMedida tipoMedida;// KG, LT, PCT, ML...
 	
-	// GETTERS E SETTERS 
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getUnidade_medida() {
-		return unidade_medida;
-	}
-
-	public void setUnidade_medida(String unidade_medida) {
-		this.unidade_medida = unidade_medida;
-	}
-
-	public int getQtd_estoque() {
-		return qtd_estoque;
-	}
-
-	public void setQtd_estoque(int qtd_estoque) {
-		this.qtd_estoque = qtd_estoque;
-	}
-
-	public BigDecimal getPreco_pago() {
-		return preco_pago;
-	}
-
-	public void setPreco_pago(BigDecimal preco_pago) {
-		this.preco_pago = preco_pago;
-	}
-
-	public Long getId_material() {
-		return id_material;
-	}
-
-	public Set<MaterialCompra> getItensCompra() {
-		return itensCompra;
-	}
+	@NotNull(message = "A quantidade por unidade do material precisa ser preenchido.")
+	@PositiveOrZero(message = "A quantidade por unidade deve ser maior ou igual a zero.")
+	@Column(nullable = false)
+	private double qtdPorUnidade;
+	
+	@NotNull(message = "A quantidade do material em estoque é obrigatoria")
+	@Column(nullable = false, length = 5)
+	@PositiveOrZero(message = "A quantidade em estoque do material nao pode ser negativo")
+	private double qtdEstoque = 0;
+	
+	@NotNull(message = "O preco pago no material é obrigatorio")
+	@Column(nullable = false, length = 10)
+	@PositiveOrZero(message = "O preco pago no material nao pode ser negativo")
+	private BigDecimal precoPago;
+	
+	@OneToMany(mappedBy = "idMaterialCompra.material", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<MaterialCompra> itensCompra = new HashSet<>();
 	
 }

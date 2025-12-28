@@ -1,8 +1,11 @@
 package com.bololoko.scev.model.entity;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -10,54 +13,38 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter 
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tb_produto")
 public class Produto {
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_produto;
+    private Long idProduto;	
     
-    private String nome_produto;
-    private String sabor; 
-    private BigDecimal preco_unidade;
+    @NotBlank(message = "O nome do produto e obrigatorio")
+    @Column(nullable = false, length = 50)
+    private String nomeProduto;
     
-    @OneToMany(mappedBy = "id_item_venda.produto", fetch = FetchType.LAZY)
-    private Set<ItemVenda> itensVenda;
+    private String sabor;
     
-    // GETTERS E SETTERS
-
-	public String getNome_produto() {
-		return nome_produto;
-	}
-
-	public void setNome_produto(String nome_produto) {
-		this.nome_produto = nome_produto;
-	}
-
-	public String getSabor() {
-		return sabor;
-	}
-
-	public void setSabor(String sabor) {
-		this.sabor = sabor;
-	}
-
-	public BigDecimal getPreco_unidade() {
-		return preco_unidade;
-	}
-
-	public void setPreco_unidade(BigDecimal preco_unidade) {
-		this.preco_unidade = preco_unidade;
-	}
-
-	public Long getId_produto() {
-		return id_produto;
-	}
-
-	public Set<ItemVenda> getItensVenda() {
-		return itensVenda;
-	}
+    @NotNull(message = "O preco do produto e obrigatorio")
+    @Column(nullable = false, length = 50)
+    @PositiveOrZero(message = "O preco do produto nao pode ser negativo")
+    private BigDecimal precoUnidade;
     
-
+    @OneToMany(mappedBy = "idItemVenda.produto", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ItemVenda> itensVenda = new HashSet<>();
+    
 }

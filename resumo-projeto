@@ -1,0 +1,27 @@
+o usuario vai entrar no sistema para realizar o registro dele, entao ele cai no dashboard principal e de la ele 
+vai pra tela de formulariospara registrar uma nova venda. da mesma forma para cadastrar a compra de alguma material.
+
+
+ultimo passo:
+
+
+preciso adicionar a marca ao material, ate pra conseguir saber qual marca foi a mais barata daquele produto.
+ja foi criado as entidades principais do projeto com as chaves compostas, agora fazer o service do projeto e o controller.
+as entidades estao sem o campo usuario porque o id do usuario sera adicionado na transação atraves do security
+
+controler venda:
+a resposta json para a busca de vendas esta retornando a venda do dia com todos os itens vendidos naquele dia.
+
+
+
+service para venda:
+ja foi criado o vendaDTO para receber as infomações do front
+a logica do vendaService ja foi criada, no qual ele recebe as informações e preenche o objeto venda e 
+	salva no banco
+	
+service de compra:
+ter no formulario campos para selecionar unidade de medida, nome do produto, estabelecimento 
+ter tambem a quantidade do material no estoque atual no momento da compra, porque vai ser o momento que eu vou saber a quantidade correta
+	entao ao registrar a compra do material o vou decrementar primeiro para depois adicionar o material no estoque;
+
+

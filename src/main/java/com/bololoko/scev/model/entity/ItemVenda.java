@@ -2,55 +2,54 @@ package com.bololoko.scev.model.entity;
 
 import java.math.BigDecimal;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter 
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tb_item_venda" )
 public class ItemVenda {
 	
 	@EmbeddedId
-	private ItemVendaPK id_item_venda = new ItemVendaPK();
+	private ItemVendaPK idItemVenda = new ItemVendaPK();
 	
-	private BigDecimal preco_unidade_venda;
+	@NotNull(message = "O preco da unidade é obrigatorio")
+	@Column(nullable = false, length = 10)
+	@PositiveOrZero(message = "O preco da unidade do produto vendido na classe ItemVenda nao pode ser negativo")
+	private BigDecimal precoUnidadeVenda;
+	
+	
+	@NotNull(message = "A quantidade vendida é obrigatoria")
+	@Column(nullable = false, length = 10)
+	@PositiveOrZero(message = "A quantidade de produtos vendidos na classe ItemVenda nao pode ser negativo")
 	private int quantidade;
+	
+	@Column(nullable = true, length = 10)
+	private String saborProduto;
 	
 	@MapsId("venda")
 	@ManyToOne(fetch = FetchType.LAZY)
-	public Venda getVenda() {
-		return id_item_venda.getVenda();
-	}
+	@JoinColumn(name = "id_venda")
+	private Venda venda;
 	
 	@MapsId("produto")
 	@ManyToOne(fetch = FetchType.LAZY)
-	public Produto getProduto() {
-		return id_item_venda.getProduto();
-	}
-	
-	// GETTERS E SETTERS 
-
-	public BigDecimal getPreco_unidade_venda() {
-		return preco_unidade_venda;
-	}
-
-	public void setPreco_unidade_venda(BigDecimal preco_unidade_venda) {
-		this.preco_unidade_venda = preco_unidade_venda;
-	}
-
-	public int getQuantidade() {
-		return quantidade;
-	}
-
-	public void setQuantidade(int quantidade) {
-		this.quantidade = quantidade;
-	}
-
-	public ItemVendaPK getId_item_venda() {
-		return id_item_venda;
-	}
+	@JoinColumn(name = "id_produto")
+	private Produto produto;
 	
 }

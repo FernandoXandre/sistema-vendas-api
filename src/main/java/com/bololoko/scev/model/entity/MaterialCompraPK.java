@@ -6,16 +6,20 @@ import java.util.Objects;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter 
+@Setter
 @Embeddable 
 public class MaterialCompraPK implements Serializable {
     
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne @JoinColumn(name = "compra_id")
+	@ManyToOne @JoinColumn(name = "compra_id", nullable = false)
     private Compra compra;
 
-    @ManyToOne @JoinColumn(name = "material_id")
+    @ManyToOne @JoinColumn(name = "material_id", nullable = false)
     private Material material;
 
     public MaterialCompraPK() {}
@@ -33,17 +37,4 @@ public class MaterialCompraPK implements Serializable {
     public int hashCode() {
         return Objects.hash(compra, material);
     }
-
-    // GETTERS E SETTERS
-    
-	public Compra getCompra() {
-		return compra;
-	}
-
-	public Material getMaterial() {
-		return material;
-	}
-    
-    
-    
 }

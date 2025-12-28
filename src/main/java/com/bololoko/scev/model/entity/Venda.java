@@ -1,64 +1,52 @@
 package com.bololoko.scev.model.entity;
 
-import java.time.Instant;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Getter 
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "tb_venda")
 public class Venda {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id_venda;
+	private Long idVenda;
 	
-	private Instant data_venda;
-	private double total_venda;
+	@NotNull(message = "A data de registro da venda e obrigatorio")
+	@Column(nullable = false)
+	private LocalDate dataVenda;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_usuario")
-	private Usuario usuario;
+	@NotNull(message = "O total da venda e obrigatorio")
+	@Column(nullable = false, length = 10)
+	@PositiveOrZero(message = "O valor total da venda nao pode ser negativo")
+	private BigDecimal totalVenda;
 	
-	@OneToMany(mappedBy = "id_item_venda.venda", fetch = FetchType.LAZY)
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "id_usuario")
+//	private Usuario usuario;
+	
+	@OneToMany(mappedBy = "idItemVenda.venda", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<ItemVenda> itens = new HashSet<>();
-	// GETTERS E SETTERS 
 
-	public Instant getData_venda() {
-		return data_venda;
-	}
-
-	public void setData_venda(Instant data_venda) {
-		this.data_venda = data_venda;
-	}
-
-	public double getTotal_venda() {
-		return total_venda;
-	}
-
-	public void setTotal_venda(double total_venda) {
-		this.total_venda = total_venda;
-	}
-
-	public Long getId_venda() {
-		return id_venda;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public Set<ItemVenda> getItens() {
-		return itens;
-	}
-	
 }
