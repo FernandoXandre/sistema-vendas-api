@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,12 +24,13 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/produtos")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class ProdutoController {
 	
 	private final ProdutoService produtoService;
 	
 	// cadastra um novo produto 
-	@PostMapping
+	@PostMapping("/novo")
 	public ResponseEntity<ProdutoDTORes> cadastraProduto(@Valid @RequestBody ProdutoDTOReq produtoDTO){
 		
 		ProdutoDTORes res = produtoService.cadastrarProduto(produtoDTO);
@@ -48,7 +50,7 @@ public class ProdutoController {
 	
 	// Busca produto por id
 	@GetMapping("/{idProduto}")
-	public ResponseEntity<ProdutoDTORes> buscaProdutoPorId(@PathVariable Long idProduto) {
+	public ResponseEntity<ProdutoDTORes> buscaProdutoPorId(@PathVariable String idProduto) {
 		
 		ProdutoDTORes produtoDTO = produtoService.buscaProdutoPorId(idProduto);
 		
@@ -57,8 +59,8 @@ public class ProdutoController {
 	
 	
 	// Atualiza por id
-	@PutMapping("/{idProduto}")
-	public ResponseEntity<ProdutoDTORes> atualizaProdutoPorId(@PathVariable Long idProduto, @Valid @RequestBody ProdutoDTOReq produtoDTOReq) {
+	@PutMapping("/editar/{idProduto}")
+	public ResponseEntity<ProdutoDTORes> atualizaProdutoPorId(@PathVariable String idProduto, @Valid @RequestBody ProdutoDTOReq produtoDTOReq) {
 		
 		ProdutoDTORes produtoDTO = produtoService.atualizaProduto(idProduto, produtoDTOReq);
 		
@@ -68,7 +70,7 @@ public class ProdutoController {
 	
 	// Deleta por id
 	@DeleteMapping("/{idProduto}")
-	public ResponseEntity<ProdutoDTORes> deletaProdutoPorId(@PathVariable Long idProduto) {
+	public ResponseEntity<ProdutoDTORes> deletaProdutoPorId(@PathVariable String idProduto) {
 		
 		produtoService.deletaProduto(idProduto);
 		

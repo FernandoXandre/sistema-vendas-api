@@ -36,6 +36,23 @@ public class CotrollerAdviceException {
 		return ResponseEntity.status(stts).body(erroCorpo);
 	}
 	
+	// Para erros de conversao de numero
+	@ExceptionHandler(NumeroInvalidoException.class) 
+	public ResponseEntity<PadraoErro> erroNumeroInvalido(NumeroInvalidoException e, HttpServletRequest req) {
+		String erroTitulo = "Numero invalido.";
+		HttpStatus stts = HttpStatus.BAD_REQUEST;
+		
+		
+		PadraoErro erroCorpo = new PadraoErro(
+				Instant.now(),
+				stts.value(),
+				erroTitulo,
+				e.getMessage(),
+				req.getRequestURI()
+			);
+			
+		return ResponseEntity.status(stts).body(erroCorpo);
+	}
 	
 	
 	// Para erros de validacao de campos do Hibernate/JPA

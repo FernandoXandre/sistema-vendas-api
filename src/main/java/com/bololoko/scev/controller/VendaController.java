@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,12 +24,13 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/vendas")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class VendaController {
 
 	private final VendaService vendaService;
 	
 	// Registra venda
-	@PostMapping
+	@PostMapping("/novo")
 	public ResponseEntity<VendaItemDTORes> registrarVenda(@Valid @RequestBody VendaItemDTOReq vendaItemDTO) { 
 		VendaItemDTORes novaVenda = vendaService.registrarVenda(vendaItemDTO);
 		return new ResponseEntity<>(novaVenda, HttpStatus.CREATED);
@@ -49,7 +51,7 @@ public class VendaController {
 	
 	
 	// Atualiza uma venda
-	@PutMapping("/{id}")
+	@PutMapping("/editar/{id}")
 	public ResponseEntity<VendaItemDTORes> atualizaVenda(@PathVariable Long idVenda, @Valid @RequestBody VendaItemDTOReq vendaDTOReq ) {
 		VendaItemDTORes res = vendaService.atualizaVenda(idVenda, vendaDTOReq);
 		return ResponseEntity.ok(res);

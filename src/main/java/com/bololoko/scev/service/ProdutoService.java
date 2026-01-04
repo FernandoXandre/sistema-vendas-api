@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bololoko.scev.model.dto.produto.ProdutoDTOReq;
 import com.bololoko.scev.model.dto.produto.ProdutoDTORes;
 import com.bololoko.scev.model.entity.Produto;
-import com.bololoko.scev.model.exception.ListaVaziaException;
+import com.bololoko.scev.model.exception.NumeroInvalidoException;
 import com.bololoko.scev.model.exception.RecursoExistenteException;
 import com.bololoko.scev.model.exception.RecursoNaoEncontradoException;
 import com.bololoko.scev.repository.ProdutoRepository;
@@ -68,16 +68,22 @@ public class ProdutoService {
 				))
 				.collect(Collectors.toList());
 		
-		if(listaProdutosDTO.isEmpty()) {
-			throw new ListaVaziaException("Nao existe produtos cadastrados. Por favor registre um.")
-		}
-		
 		return listaProdutosDTO;
 	}
 	
 	//Buscar produto por id
 	@Transactional
-	public ProdutoDTORes buscaProdutoPorId(Long idProduto) {
+	public ProdutoDTORes buscaProdutoPorId(String id) {
+		
+		Long idProduto;
+		
+		// Converte Id
+		try {
+			idProduto = Long.parseLong(id);
+		} catch (NumberFormatException e) {
+			throw new NumeroInvalidoException("O id informado não é valido.");
+		};
+		
 		
 		// busca o produto no banco de dados
 		Produto produto = produtoRepository.findById(idProduto)
@@ -95,7 +101,16 @@ public class ProdutoService {
 	
 	// Atualiza produto
 	@Transactional
-	public ProdutoDTORes atualizaProduto(Long idProduto, ProdutoDTOReq produtoDTO) {
+	public ProdutoDTORes atualizaProduto(String id, ProdutoDTOReq produtoDTO) {
+		
+		Long idProduto;
+		
+		// Converte id
+		try {
+			idProduto = Long.parseLong(id);
+		} catch (NumberFormatException e) {
+			throw new NumeroInvalidoException("O id informado não é valido.");
+		}
 		
 		// Trata o nome do produto
 		String nomeProdutoTratado = StringUtils.padronizaString(produtoDTO.nomeProduto());
@@ -125,7 +140,15 @@ public class ProdutoService {
 	
 	// Deleta produto
 	@Transactional
-	public void deletaProduto(Long idProduto) {
+	public void deletaProduto(String id) {
+		
+		Long idProduto;
+		
+		try {
+			idProduto = Long.parseLong(id);
+		} catch (NumberFormatException e) {
+			throw new NumeroInvalidoException("O id informado não é valido.");
+		}
 		
 		// Verifica se o produto existe no banco
 		if(!produtoRepository.existsById(idProduto)) {
